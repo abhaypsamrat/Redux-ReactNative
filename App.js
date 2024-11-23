@@ -1,98 +1,60 @@
 import React from 'react';
-import {View, StyleSheet, ScrollView} from 'react-native';
-import Header from './src/components/Header';
-import Product from './src/components/Product';
+import {NavigationContainer} from '@react-navigation/native';
+import {createDrawerNavigator} from '@react-navigation/drawer';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import Home from './src/screen/Home';
+import Profile from './src/screen/Profile';
+import Setting from './src/screen/Setting';
+import Login from './src/screen/Login';
 
-const App = () => {
-  const products = [
-    {
-      name: 'Samsung Galaxy S21',
-      price: 70000,
-      color: 'Phantom Black',
-      image:
-        'https://www.itel-india.com/wp-content/uploads/2024/08/800x800-F4-1-450x450.jpg',
-    },
-    {
-      name: 'Apple iPhone 13',
-      price: 120000,
-      color: 'Blue',
-      image:
-        'https://www.tecnosell.com/media/catalog/product/cache/60c31028333b516fd0f8945d994bb7aa/b/l/blu1_2_7_1.jpg',
-    },
-    {
-      name: 'OnePlus 9 Pro',
-      price: 65000,
-      color: 'Morning Mist',
-      image:
-        'https://www.itel-india.com/wp-content/uploads/2024/08/800x800-F4-1-450x450.jpg',
-    },
-    {
-      name: 'Google Pixel 6',
-      price: 80000,
-      color: 'Sorta Seafoam',
-      image:
-        'https://www.itel-india.com/wp-content/uploads/2024/08/800x800-F4-1-450x450.jpg',
-    },
-    {
-      name: 'Xiaomi Mi 11 Ultra',
-      price: 60000,
-      color: 'Ceramic White',
-      image:
-        'https://www.itel-india.com/wp-content/uploads/2024/08/800x800-F4-1-450x450.jpg',
-    },
-    {
-      name: 'Sony Xperia 5 III',
-      price: 85000,
-      color: 'Green',
-      image:
-        'https://www.itel-india.com/wp-content/uploads/2024/08/800x800-F4-1-450x450.jpg',
-    },
-    {
-      name: 'Oppo Find X3 Pro',
-      price: 75000,
-      color: 'Gloss Black',
-      image:
-        'https://www.itel-india.com/wp-content/uploads/2024/08/800x800-F4-1-450x450.jpg',
-    },
-    {
-      name: 'Vivo X70 Pro+',
-      price: 78000,
-      color: 'Aurora Dawn',
-      image:
-        'https://www.itel-india.com/wp-content/uploads/2024/08/800x800-F4-1-450x450.jpg',
-    },
-    {
-      name: 'Realme GT',
-      price: 45000,
-      color: 'Racing Yellow',
-      image:
-        'https://www.itel-india.com/wp-content/uploads/2024/08/800x800-F4-1-450x450.jpg',
-    },
-    {
-      name: 'Motorola Edge 20 Pro',
-      price: 55000,
-      color: 'Midnight Sky',
-      image:
-        'https://www.itel-india.com/wp-content/uploads/2024/08/800x800-F4-1-450x450.jpg',
-    },
-  ];
+// Import Icons from React Native Vector Icons
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
+// Bottom Tab Navigator
+const Tab = createBottomTabNavigator();
+function BottomTabNavigator() {
   return (
-    <View style={style.container}>
-      <Header />
-      <ScrollView>
-        {products.map(item => (
-          <Product item={item} />
-        ))}
-      </ScrollView>
-    </View>
+    <Tab.Navigator
+      screenOptions={({route}) => ({
+        headerShown: false,
+        tabBarIcon: ({color, size}) => {
+          let iconName;
+
+          if (route.name === 'Home') {
+            iconName = 'home';
+          } else if (route.name === 'Settings') {
+            iconName = 'settings';
+          } else if (route.name === 'Login') {
+            iconName = 'login';
+          }
+
+          return <MaterialIcons name={iconName} size={size} color={color} />;
+        },
+      })}>
+      <Tab.Screen name="Home" component={Home} />
+      <Tab.Screen name="Settings" component={Setting} />
+      <Tab.Screen name="Login" component={Login} />
+    </Tab.Navigator>
   );
-};
+}
 
-export default App;
-
-const style = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});
+// Drawer Navigator
+const Drawer = createDrawerNavigator();
+export default function App() {
+  return (
+    <NavigationContainer>
+      <Drawer.Navigator>
+        <Drawer.Screen
+          name="HomeTabs"
+          component={BottomTabNavigator}
+          options={{title: 'Welcome'}}
+        />
+        <Drawer.Screen
+          name="Profile"
+          component={Profile}
+          options={{title: 'Profile'}}
+        />
+      </Drawer.Navigator>
+    </NavigationContainer>
+  );
+}
